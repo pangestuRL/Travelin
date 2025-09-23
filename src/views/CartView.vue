@@ -137,18 +137,18 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="p-6 max-w-4xl mx-auto">
+  <div class="p-4 sm:p-6 max-w-4xl mx-0 sm:mx-auto">
+
     <h1 class="text-2xl font-bold mb-4">My Cart</h1>
 
     <p v-if="loading" class="text-gray-500">Loading...</p>
     <p v-if="error" class="text-red-500">{{ error }}</p>
 
     <div v-if="carts.length" class="space-y-4">
-      <!-- Daftar Cart -->
       <div
         v-for="cart in carts"
         :key="cart.id"
-        class="flex items-center justify-between bg-white shadow p-4 rounded-lg"
+        class="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-white shadow p-4 rounded-lg gap-4"
       >
         <div class="flex items-center gap-4">
           <img
@@ -177,13 +177,12 @@ onMounted(() => {
         </div>
         <button
           @click="deleteCart(cart.id)"
-          class="text-red-500 hover:underline"
+          class="text-red-500 hover:underline self-start sm:self-auto"
         >
           Hapus
         </button>
       </div>
 
-      <!-- Pilih metode pembayaran -->
       <div class="mt-6">
         <h2 class="text-lg font-semibold mb-2">Pilih Metode Pembayaran</h2>
         <div class="grid grid-cols-2 gap-4">
@@ -203,19 +202,19 @@ onMounted(() => {
               class="hidden"
             />
             <img :src="pm.imageUrl" :alt="pm.name" class="h-8" />
-            <span>{{ pm.name }}</span>
           </label>
         </div>
       </div>
 
-      <!-- Total + Checkout -->
-      <div class="flex justify-between items-center mt-6 border-t pt-4">
+      <div
+        class="flex flex-col sm:flex-row justify-between items-center mt-6 border-t pt-4 gap-3"
+      >
         <p class="text-xl font-bold">
           Total: Rp {{ totalPrice.toLocaleString("id-ID") }}
         </p>
         <button
           @click="checkout"
-          class="bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600"
+          class="w-full sm:w-auto bg-green-500 text-white px-6 py-2 rounded-lg hover:bg-green-600"
         >
           Checkout
         </button>
@@ -225,3 +224,4 @@ onMounted(() => {
     <p v-else-if="!loading" class="text-gray-500">Cart masih kosong</p>
   </div>
 </template>
+

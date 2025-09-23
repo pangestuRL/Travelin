@@ -16,7 +16,7 @@ onMounted(() => {
 </script>
 
 <template>
-  <div class="p-4">
+  <div class="p-0 sm:p-6">
     <div v-if="contentStore.banners.length" class="mb-8">
       <Swiper
         :modules="[Pagination, Autoplay]"
@@ -24,7 +24,7 @@ onMounted(() => {
         :loop="true"
         :autoplay="{ delay: 3000 }"
         :pagination="{ clickable: true }"
-        class="rounded-lg overflow-hidden shadow"
+        class="sm:rounded-lg overflow-hidden shadow"
       >
         <SwiperSlide
           v-for="banner in contentStore.banners"
@@ -33,16 +33,17 @@ onMounted(() => {
           <img
             :src="banner.imageUrl"
             :alt="banner.name"
-            class="w-full h-[400px] object-cover"
+            class="w-full h-[250px] sm:h-[400px] object-cover"
           />
         </SwiperSlide>
       </Swiper>
     </div>
 
-    <h2 class="text-2xl font-bold mb-4">Destinations</h2>
+    <h2 class="text-2xl font-bold mb-4 px-4 sm:px-0">Destinations</h2>
+
     <div
       v-if="contentStore.activities.length"
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6 px-4 sm:px-0"
     >
       <CardDestination
         v-for="act in contentStore.activities"
@@ -51,10 +52,15 @@ onMounted(() => {
         :title="act.title"
         :image="act.imageUrls && act.imageUrls.length ? act.imageUrls[0] : ''"
         :price="act.price"
-        />
+      />
     </div>
 
-    <p v-if="contentStore.loading" class="text-gray-500 mt-4">Loading...</p>
-    <p v-if="contentStore.error" class="text-red-500 mt-4">{{ contentStore.error }}</p>
+    <p v-if="contentStore.loading" class="text-gray-500 mt-4 px-4 sm:px-0">
+      Loading...
+    </p>
+    <p v-if="contentStore.error" class="text-red-500 mt-4 px-4 sm:px-0">
+      {{ contentStore.error }}
+    </p>
   </div>
 </template>
+

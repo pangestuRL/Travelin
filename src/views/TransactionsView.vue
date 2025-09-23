@@ -67,7 +67,7 @@ const uploadImage = async (file: File): Promise<string | null> => {
     })
     if (!res.ok) throw new Error("Upload image gagal")
     const data = await res.json()
-    return data.url // backend return { url: "https://..." }
+    return data.url 
   } catch (err: any) {
     alert(err.message)
     return null
@@ -108,7 +108,7 @@ onMounted(fetchTransactions)
 </script>
 
 <template>
-  <div class="p-6 max-w-5xl mx-auto">
+  <div class="w-full p-4 sm:p-6 sm:max-w-5xl mx-0 sm:mx-auto">
     <h1 class="text-2xl font-bold mb-4">My Transactions</h1>
 
     <p v-if="loading" class="text-gray-500">Loading...</p>
@@ -120,23 +120,22 @@ onMounted(fetchTransactions)
         :key="trx.id"
         class="bg-white shadow rounded-lg p-4 space-y-4"
       >
-        <!-- Header transaksi -->
-        <div class="flex justify-between items-center">
-          <p class="font-semibold">Invoice: {{ trx.invoiceId }}</p>
-          <span
-            class="px-3 py-1 rounded-full text-xs font-semibold"
-            :class="{
-              'bg-yellow-100 text-yellow-700': trx.status === 'pending',
-              'bg-green-100 text-green-700': trx.status === 'paid',
-              'bg-red-100 text-red-700': trx.status === 'cancelled',
-              'bg-blue-100 text-blue-700': trx.status === 'completed'
-            }"
-          >
-            {{ trx.status }}
-          </span>
-        </div>
+      <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center gap-2">
+        <p class="font-semibold">Invoice: {{ trx.invoiceId }}</p>
+        <span
+          class="px-3 py-1 rounded-full text-xs font-semibold w-fit"
+          :class="{
+            'bg-yellow-100 text-yellow-700': trx.status === 'pending',
+            'bg-green-100 text-green-700': trx.status === 'paid',
+            'bg-red-100 text-red-700': trx.status === 'cancelled',
+            'bg-blue-100 text-blue-700': trx.status === 'completed'
+          }"
+        >
+          {{ trx.status }}
+        </span>
+      </div>
 
-        <!-- Items -->
+
         <div class="flex flex-col gap-3">
           <div
             v-for="item in trx.transaction_items || []"
@@ -144,10 +143,7 @@ onMounted(fetchTransactions)
             class="flex items-center gap-4"
           >
             <img
-              :src="
-                item.imageUrls?.[0] ||
-                'https://via.placeholder.com/100x80?text=No+Image'
-              "
+              :src="item.imageUrls?.[0] || 'https://via.placeholder.com/100x80?text=No+Image'"
               alt="item"
               class="w-24 h-20 object-cover rounded"
             />
@@ -161,7 +157,6 @@ onMounted(fetchTransactions)
           </div>
         </div>
 
-        <!-- Payment Method -->
         <div class="mt-4 flex items-center gap-3">
           <img
             :src="trx.payment_method?.imageUrl"
@@ -179,8 +174,7 @@ onMounted(fetchTransactions)
           </div>
         </div>
 
-        <!-- Total & Dates -->
-        <div class="flex justify-between items-center mt-2">
+        <div class="flex flex-col sm:flex-row sm:justify-between sm:items-center mt-2 gap-2">
           <p class="text-lg font-bold">
             Total: Rp {{ getTotal(trx).toLocaleString("id-ID") }}
           </p>
@@ -189,16 +183,16 @@ onMounted(fetchTransactions)
           </p>
         </div>
 
-        <!-- Proof Payment -->
         <div class="mt-4">
           <div v-if="trx.proofPaymentUrl">
             <p class="text-sm text-gray-600 mb-2">Bukti Pembayaran:</p>
             <a
               :href="trx.proofPaymentUrl"
               target="_blank"
-              class="text-blue-500 underline"
-              >{{ trx.proofPaymentUrl }}</a
+              class="text-blue-500 underline break-all"
             >
+              {{ trx.proofPaymentUrl }}
+            </a>
           </div>
           <div v-else-if="trx.status === 'pending'">
             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -225,3 +219,4 @@ onMounted(fetchTransactions)
     <p v-else-if="!loading" class="text-gray-500">Belum ada transaksi</p>
   </div>
 </template>
+
