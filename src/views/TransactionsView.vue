@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, onMounted } from "vue"
 import { useRouter } from "vue-router"
+import { BASE_URL, API_KEY } from "../utils/api"
 
-const BASE_URL = "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1"
-const API_KEY = "24405e01-fbc1-45a5-9f5a-be13afcd757c"
+
 
 const router = useRouter()
 const transactions = ref<any[]>([])
@@ -26,11 +26,15 @@ const fetchTransactions = async () => {
     })
     if (!res.ok) throw new Error("Gagal ambil transaksi")
     const data = await res.json()
-    // tambahkan field lokal untuk input proof URL
-    transactions.value = data.data.map((trx: any) => ({
-      ...trx,
-      _proofUrl: "",
-    }))
+    transactions.value = data.data
+      .map((trx: any) => ({
+        ...trx,
+        _proofUrl: "",
+      }))
+      .sort(
+        (a: any, b: any) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      )
   } catch (err: any) {
     error.value = err.message
   } finally {
@@ -38,9 +42,44 @@ const fetchTransactions = async () => {
   }
 }
 
-const uploadProof = async (transactionId: string, url: string) => {
+const getTotal = (trx: any) => {
+  return trx.transaction_items.reduce(
+    (sum: number, item: any) => sum + item.price * item.quantity,
+    0
+  )
+}
+
+const uploadImage = async (file: File): Promise<string | null> => {
+  const token = localStorage.getItem("token")
+  if (!token) return null
+
+  const formData = new FormData()
+  formData.append("image", file)
+
+  try {
+    const res = await fetch(`${BASE_URL}/upload-image`, {
+      method: "POST",
+      headers: {
+        apiKey: API_KEY,
+        Authorization: `Bearer ${token}`,
+      },
+      body: formData,
+    })
+    if (!res.ok) throw new Error("Upload image gagal")
+    const data = await res.json()
+    return data.url // backend return { url: "https://..." }
+  } catch (err: any) {
+    alert(err.message)
+    return null
+  }
+}
+
+const uploadProof = async (transactionId: string, file: File) => {
   const token = localStorage.getItem("token")
   if (!token) return
+
+  const imageUrl = await uploadImage(file)
+  if (!imageUrl) return
 
   try {
     const res = await fetch(
@@ -53,7 +92,7 @@ const uploadProof = async (transactionId: string, url: string) => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          proofPaymentUrl: url,
+          proofPaymentUrl: imageUrl,
         }),
       }
     )
@@ -143,7 +182,7 @@ onMounted(fetchTransactions)
         <!-- Total & Dates -->
         <div class="flex justify-between items-center mt-2">
           <p class="text-lg font-bold">
-            Total: Rp {{ trx.totalAmount.toLocaleString("id-ID") }}
+            Total: Rp {{ getTotal(trx).toLocaleString("id-ID") }}
           </p>
           <p class="text-sm text-gray-500">
             Expired: {{ new Date(trx.expiredDate).toLocaleString("id-ID") }}
@@ -163,22 +202,21 @@ onMounted(fetchTransactions)
           </div>
           <div v-else-if="trx.status === 'pending'">
             <label class="block text-sm font-medium text-gray-700 mb-2">
-              Masukkan URL Bukti Pembayaran
+              Upload Bukti Pembayaran
             </label>
-            <div class="flex gap-2">
-              <input
-                v-model="trx._proofUrl"
-                type="text"
-                placeholder="https://example.com/bukti.jpg"
-                class="flex-1 border rounded px-3 py-2 text-sm"
-              />
-              <button
-                @click="uploadProof(trx.id, trx._proofUrl)"
-                class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm"
-              >
-                Upload
-              </button>
-            </div>
+            <input
+              type="file"
+              accept="image/*"
+              @change="e => trx._file = (e.target as HTMLInputElement).files?.[0] || null"
+              class="mb-2"
+            />
+            <button
+              @click="trx._file && uploadProof(trx.id, trx._file)"
+              class="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 text-sm"
+              :disabled="!trx._file"
+            >
+              Upload
+            </button>
           </div>
         </div>
       </div>

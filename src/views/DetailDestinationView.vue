@@ -1,10 +1,10 @@
 <script setup lang="ts">
 import { onMounted, ref } from "vue"
 import { useRoute, useRouter } from "vue-router"
+import { useCartStore } from "../store/cart"
+import { BASE_URL, API_KEY } from "../utils/api"
 
-const BASE_URL = "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1"
-const API_KEY = "24405e01-fbc1-45a5-9f5a-be13afcd757c"
-
+const cartStore = useCartStore()
 const route = useRoute()
 const router = useRouter()
 const destination = ref<any>(null)
@@ -48,6 +48,7 @@ const addToCart = async () => {
       }),
     })
     if (!res.ok) throw new Error("Gagal tambah ke cart")
+    cartStore.increment(1)
     alert("Ditambahkan ke cart ✅")
   } catch (err: any) {
     alert(err.message)

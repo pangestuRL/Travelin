@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from "vue"
 import { useRouter } from "vue-router"
+import { useCartStore } from "../store/cart"
+import { BASE_URL, API_KEY } from "../utils/api"
 
-const BASE_URL = "https://travel-journal-api-bootcamp.do.dibimbing.id/api/v1"
-const API_KEY = "24405e01-fbc1-45a5-9f5a-be13afcd757c"
 
 const router = useRouter()
 const carts = ref<any[]>([])
@@ -11,6 +11,7 @@ const paymentMethods = ref<any[]>([])
 const selectedPayment = ref<string>("")
 const loading = ref(false)
 const error = ref<string | null>(null)
+const cartStore = useCartStore()
 
 const fetchCart = async () => {
   const token = localStorage.getItem("token")
@@ -29,6 +30,7 @@ const fetchCart = async () => {
     if (!res.ok) throw new Error("Gagal ambil cart")
     const data = await res.json()
     carts.value = data.data
+    cartStore.setCount(carts.value.length)
   } catch (err: any) {
     error.value = err.message
   } finally {
@@ -188,7 +190,11 @@ onMounted(() => {
           <label
             v-for="pm in paymentMethods"
             :key="pm.id"
-            class="flex items-center gap-3 border p-3 rounded-lg cursor-pointer hover:border-blue-500"
+            class="flex items-center gap-3 border p-3 rounded-lg cursor-pointer"
+            :class="{
+              'border-blue-500 bg-blue-50': selectedPayment === pm.id,
+              'hover:border-blue-500': selectedPayment !== pm.id
+            }"
           >
             <input
               type="radio"
