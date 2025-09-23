@@ -11,6 +11,17 @@ const destination = ref<any>(null)
 const loading = ref(false)
 const error = ref<string | null>(null)
 
+
+const defaultImage =
+  "https://static.vecteezy.com/system/resources/previews/025/871/533/non_2x/travel-destination-background-and-template-design-with-travel-destinations-and-famous-landmarks-and-attractions-for-tourism-let-s-go-travel-illustration-vector.jpg"
+
+const onError = (event: Event) => {
+  const target = event.target as HTMLImageElement | null
+  if (target) {
+    target.src = defaultImage
+  }
+}
+
 const fetchDetail = async () => {
   loading.value = true
   try {
@@ -55,6 +66,16 @@ const addToCart = async () => {
   }
 }
 
+const cleanLocation = (raw: string) => {
+  if (!raw) return ""
+  try {
+    return raw.replace(/\\+/g, "")
+  } catch {
+    return raw
+  }
+}
+
+
 onMounted(fetchDetail)
 </script>
 
@@ -64,53 +85,47 @@ onMounted(fetchDetail)
     <p v-if="error" class="text-red-500">{{ error }}</p>
 
     <div v-if="destination" class="bg-white rounded-lg shadow p-6 space-y-6">
-      <!-- Gambar utama -->
       <img
-        :src="destination.imageUrls?.[0] || 'https://via.placeholder.com/600x400?text=No+Image'"
+        :src="destination.imageUrls?.[0] || defaultImage"
         alt="destination"
         class="w-full h-80 object-cover rounded-lg mb-4"
+        @error="onError"
       />
 
-      <!-- Judul dan harga -->
       <div class="flex justify-between items-center">
         <h1 class="text-3xl font-bold">{{ destination.title }}</h1>
         <div class="text-right">
           <p class="text-2xl font-bold text-blue-600">
             Rp {{ destination.price.toLocaleString("id-ID") }}
           </p>
-          <p v-if="destination.price_discount" class="text-green-600">
-            Diskon: Rp {{ destination.price_discount.toLocaleString("id-ID") }}
-          </p>
         </div>
       </div>
 
-      <!-- Rating dan review -->
       <div class="flex items-center gap-2">
         <span class="text-yellow-500">⭐ {{ destination.rating }}</span>
-        <span class="text-gray-500">({{ destination.total_reviews }} reviews)</span>
+        <span class="text-gray-500"
+          >({{ destination.total_reviews }} reviews)</span
+        >
       </div>
 
-      <!-- Deskripsi -->
       <p class="text-gray-700">{{ destination.description }}</p>
 
-      <!-- Fasilitas -->
       <div>
         <h2 class="text-lg font-semibold mb-2">Facilities</h2>
-        <p class="text-gray-600">{{ destination.facilities || "Tidak ada info fasilitas" }}</p>
+        <p class="text-gray-600">
+          {{ destination.facilities || "Tidak ada info fasilitas" }}
+        </p>
       </div>
 
-      <!-- Lokasi -->
       <div>
         <h2 class="text-lg font-semibold mb-2">Location</h2>
         <p class="text-gray-600">
-          {{ destination.address }},
-          {{ destination.city }},
+          {{ destination.address }}, {{ destination.city }},
           {{ destination.province }}
         </p>
-        <div class="mt-2" v-html="destination.location_maps"></div>
+          <div class="mt-2" v-html="cleanLocation(destination.location_maps)"></div>
       </div>
 
-      <!-- Tombol -->
       <div class="flex justify-end">
         <button
           @click="addToCart"

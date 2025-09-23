@@ -1,15 +1,17 @@
 <script setup lang="ts">
 import Footer from "./components/Footer.vue";
-import Navbar from "./components/Navbar.vue"
+import Navbar from "./components/Navbar.vue";
 </script>
 
 <template>
-  <div class="min-h-screen bg-gray-50">
+  <div class="min-h-screen flex flex-col bg-gray-50">
     <Navbar />
-    <main class="p-6">
+
+    <main class="flex-1 p-6">
       <RouterView />
     </main>
-    <Footer/>
+
+    <Footer />
   </div>
 </template>
 

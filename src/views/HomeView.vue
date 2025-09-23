@@ -2,8 +2,6 @@
 import { onMounted } from "vue"
 import { useContentStore } from "../store/content"
 import CardDestination from "../components/CardDestination.vue"
-
-// Swiper
 import { Swiper, SwiperSlide } from "swiper/vue"
 import "swiper/css"
 import "swiper/css/pagination"
@@ -19,7 +17,6 @@ onMounted(() => {
 
 <template>
   <div class="p-4">
-    <!-- Banner Section with Swiper -->
     <div v-if="contentStore.banners.length" class="mb-8">
       <Swiper
         :modules="[Pagination, Autoplay]"
@@ -42,7 +39,6 @@ onMounted(() => {
       </Swiper>
     </div>
 
-    <!-- Activities Section -->
     <h2 class="text-2xl font-bold mb-4">Destinations</h2>
     <div
       v-if="contentStore.activities.length"
@@ -58,7 +54,6 @@ onMounted(() => {
         />
     </div>
 
-    <!-- Loading / Error -->
     <p v-if="contentStore.loading" class="text-gray-500 mt-4">Loading...</p>
     <p v-if="contentStore.error" class="text-red-500 mt-4">{{ contentStore.error }}</p>
   </div>
