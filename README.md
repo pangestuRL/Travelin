@@ -1,5 +1,38 @@
-# Vue 3 + TypeScript + Vite
+🕊 Travelin
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+Travelin adalah platform booking destinasi wisata yang memudahkan pengguna untuk mencari, memesan, dan melakukan pembayaran perjalanan secara online.
+Proyek ini dibangun menggunakan Vue 3 + TypeScript + Pinia + Tailwind CSS dan sudah dideploy di Vercel.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+🔗 Live Demo: https://travelin-psi.vercel.app/
+
+✨ Fitur Utama
+🔐 Autentikasi: Login & Register dengan sistem token.
+🏝 Destinasi Wisata: Lihat daftar aktivitas/destinasi lengkap dengan detail, gambar, deskripsi, rating, dan fasilitas.
+🛒 Keranjang (Cart): Tambahkan destinasi ke keranjang, ubah jumlah tiket, dan hapus item.
+💳 Transaksi: Checkout dengan metode pembayaran virtual account (VA).
+📸 Upload Bukti Pembayaran: Bisa upload gambar sebagai proof payment.
+📱 Responsive Design: Tampilan mobile full screen, desktop berbasis card dengan UI rapi.
+🧭 Navbar & Footer: Navigasi utama + informasi footer.
+
+
+🛠️ Tech Stack
+Vue 3 (Composition API & <script setup>)
+TypeScript
+Pinia
+ – State management
+Vue Router
+ – Routing
+Tailwind CSS
+ – Styling modern & responsive
+Vercel
+ – Deployment
+
+
+ 📂 Struktur Proyek
+ src/
+├── components/       # Reusable components (Navbar, Footer, Card, dll)
+├── store/            # Pinia stores (auth, cart, content)
+├── views/            # Halaman (Home, Cart, Transactions, Detail, Login, Register)
+├── utils/            # API base URL & helper
+├── App.vue           # Root component
+└── main.ts           # Entry point
