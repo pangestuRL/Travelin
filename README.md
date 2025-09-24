@@ -3,6 +3,10 @@
 Travelin adalah platform booking destinasi wisata yang memudahkan pengguna untuk mencari, memesan, dan melakukan pembayaran perjalanan secara online.
 Proyek ini dibangun menggunakan Vue 3 + TypeScript + Pinia + Tailwind CSS dan sudah dideploy di Vercel.
 
+
+Project ini merupakan **assignment setelah mengikuti refresment class belajar vue js selama 2 minggu di bootcamp [dibimbing.id](https://dibimbing.id)**.  
+
+
 🔗 Live Demo: https://travelin-psi.vercel.app/
 
 
