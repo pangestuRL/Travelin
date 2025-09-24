@@ -5,6 +5,8 @@ Proyek ini dibangun menggunakan Vue 3 + TypeScript + Pinia + Tailwind CSS dan su
 
 🔗 Live Demo: https://travelin-psi.vercel.app/
 
+
+
 ✨ Fitur Utama
 
 🔐 Autentikasi: Login & Register dengan sistem token.
@@ -20,6 +22,8 @@ Proyek ini dibangun menggunakan Vue 3 + TypeScript + Pinia + Tailwind CSS dan su
 📱 Responsive Design: Tampilan mobile full screen, desktop berbasis card dengan UI rapi.
 
 🧭 Navbar & Footer: Navigasi utama + informasi footer.
+
+
 
 
 🛠️ Tech Stack
@@ -40,6 +44,8 @@ Tailwind CSS
 
 Vercel
  – Deployment
+
+
 
 
  📂 Struktur Proyek
